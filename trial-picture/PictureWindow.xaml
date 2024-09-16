@@ -1,0 +1,28 @@
+﻿<Window x:Class="trial_picture.PictureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:trial_picture"
+        mc:Ignorable="d"
+        Title="PictureWindow" Width="800" Height="600" >
+    <Grid>
+        <Canvas Background="LightYellow" Width="220" Height="430" HorizontalAlignment="Left"   VerticalAlignment="Top" Margin="25,50,0,0">
+            <ListBox Name="picturesList" SelectionMode="Single" Height="400">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Width="180" Height="80" Margin="5" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button x:Name="saveCapture" Width="100" Height="30" Canvas.Bottom="0" Canvas.Right="0" Click="saveCaptureOnClick">保存</Button>
+        </Canvas>
+        <Canvas Background="DeepSkyBlue" Width="505" Height="430" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,50,25,0">
+            <TextBlock FontSize="14" Canvas.Top="3" Canvas.Left="2">撮影中</TextBlock>
+            <Border Background="Gray" BorderBrush="DarkGray" BorderThickness="2" Canvas.Top="30">
+                <Image Name="pictureImage" Width="500" Height="350" />
+            </Border>
+            <Button x:Name="getCapture" Width="100" Height="30" Canvas.Bottom="0" Canvas.Right="0" Click="getCaptureOnClick">キャプチャ取得</Button>
+        </Canvas>
+    </Grid>
+</Window>

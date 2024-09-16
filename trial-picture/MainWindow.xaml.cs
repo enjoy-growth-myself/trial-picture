@@ -20,5 +20,11 @@ namespace trial_picture
         {
             InitializeComponent();
         }
+
+        public void openPictureWindow(object sender, RoutedEventArgs e)
+        {
+           PictureWindow secondWindow = new PictureWindow();
+            secondWindow.Show();
+        }
     }
 }

@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Button x:Name="PictureWindow" Width="100" Height="50" Click="openPictureWindow">撮影</Button>
+        </StackPanel>
     </Grid>
 </Window>
+ 
