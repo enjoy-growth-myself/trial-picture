@@ -5,26 +5,74 @@ using Microsoft.Win32;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 using trial_picture.models;
+using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 
 namespace trial_picture
 {
-    /// <summary>
-    /// PictureWindow.xaml の相互作用ロジック
-    /// </summary>
-    public partial class PictureWindow : System.Windows.Window
+    public class PictureViewModel : BaseViewModel
     {
+        public ICommand RelayCommand { get; }
         private VideoCapture _videoCapture;
         private Mat _mat;
         private bool _isRunning;
         private List<Picture> _pictures;
         private int _id = 0;
+        private BitmapSource _currentImage;
+        private ICommand _getCaptureOnClickCommand;
+        private ICommand _saveCaptureOnClickCommnad;
+        private BitmapSource _selectedImage;
 
-        public PictureWindow()
+        public ObservableCollection<BitmapSource> CaptureImages { get; set; }
+
+        public PictureViewModel()
         {
-            InitializeComponent();
             _pictures = new List<Picture>();
+            CaptureImages = new ObservableCollection<BitmapSource>();
+            getCaptureOnClickCommand = new RelayCommand(getCaptureOnClick);
+            saveCaptureOnClickCommnad = new RelayCommand(saveCaptureOnClick);
             StartCamera();
+        }
+
+        public BitmapSource PictureImage
+        {
+            get { return _currentImage; }
+            set
+            {
+                _currentImage = value;
+                OnPropertyChanged();  // プロパティの変更を通知してUIを更新
+            }
+        }
+       
+        public ICommand getCaptureOnClickCommand
+        {
+            get { return _getCaptureOnClickCommand; }
+            set
+            {
+                _getCaptureOnClickCommand = value;
+                OnPropertyChanged();  // プロパティ変更を通知
+            }
+        }
+
+        public ICommand saveCaptureOnClickCommnad
+        {
+            get { return _saveCaptureOnClickCommnad; }
+            set
+            {
+                _saveCaptureOnClickCommnad = value;
+                OnPropertyChanged();  // プロパティ変更を通知
+            }
+        }
+
+        public BitmapSource SelectedImage
+        {
+            get { return _selectedImage; }
+            set
+            {
+                _selectedImage = value;
+                OnPropertyChanged();  // 選択された画像をUIに通知
+            }
         }
 
         private async void StartCamera()
@@ -53,40 +101,35 @@ namespace trial_picture
 
                         _mat = frame.Clone();
                         // UIスレッドでImageコントロールにフレームを表示
-                        Dispatcher.Invoke(() =>
+                        App.Current.Dispatcher.Invoke(() =>
                         {
-                            pictureImage.Source = frame.ToBitmapSource();
+                            PictureImage = frame.ToBitmapSource();
                         });
                     }
                 }
             });
         }
 
-        private void getCaptureOnClick(object sender, RoutedEventArgs e)
-        { 
+        private void getCaptureOnClick(object parameter)
+        {
             Mat mat = _mat.Clone();
-            Picture currentPicture = new Picture { Id = _id, mat = mat };
 
-            _pictures.Add(currentPicture);
+            var image = mat.ToBitmapSource();
 
-            var image  = mat.ToBitmapSource();
-
-            picturesList.Items.Add(image);
-
-            _id += 1;
+            CaptureImages.Add(image);
 
             Console.WriteLine("テスト");
         }
 
-        public void saveCaptureOnClick(object sender, RoutedEventArgs e)
+        public void saveCaptureOnClick(object parameter)
         {
-            var selectedImage = picturesList.SelectedItem as BitmapSource;
-            if (selectedImage != null)
+            
+            if (SelectedImage != null)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "JPEG ファイル (*.jpg)|*.jpg"; // PNGファイル形式を指定
                 saveFileDialog.Title = "保存先を選択してください";
-                saveFileDialog.FileName = "image.png";  // デフォルトのファイル名
+                saveFileDialog.FileName = "image.jpg";  // デフォルトのファイル名
 
                 // ダイアログがOKで閉じられた場合のみ保存処理を行う
                 if (saveFileDialog.ShowDialog() == true)
@@ -95,7 +138,7 @@ namespace trial_picture
 
                     // 画像を指定された場所に保存
                     var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(selectedImage));
+                    encoder.Frames.Add(BitmapFrame.Create(SelectedImage));
 
                     using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
@@ -110,14 +153,6 @@ namespace trial_picture
             {
                 MessageBox.Show("保存する画像を選択してください");
             }
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            _isRunning = false;
-            _videoCapture?.Release();
-            _videoCapture?.Dispose();
-            base.OnClosed(e);
         }
     }
 }
