@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:trial_picture"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="200" Width="300">
     <Grid>
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
             <Button x:Name="PictureWindow" Width="100" Height="50" Command="{Binding OpenPictureWindowCommand}">撮影</Button>
+
+            <ComboBox  ItemsSource="{Binding Cameras}" SelectedItem="{Binding SelectedCamera}"   HorizontalAlignment="Center" Margin="0,10,10,0"></ComboBox>
         </StackPanel>
     </Grid>
 </Window>

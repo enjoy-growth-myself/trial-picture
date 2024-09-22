@@ -18,24 +18,10 @@ namespace trial_picture
         private Mat _mat;
         private bool _isRunning;
 
-        public PictureWindow()
+        public PictureWindow(int cameraNo)
         {
             InitializeComponent();
-            this.DataContext = new PictureViewModel();
-            //StartCamera();
-        }
-
-        
-       
-
-        
-
-        protected override void OnClosed(EventArgs e)
-        {
-            _isRunning = false;
-            _videoCapture?.Release();
-            _videoCapture?.Dispose();
-            base.OnClosed(e);
+            this.DataContext = new PictureViewModel(cameraNo);
         }
     }
 }

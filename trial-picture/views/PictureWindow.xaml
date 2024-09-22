@@ -17,12 +17,15 @@
             </ListBox>
             <Button x:Name="saveCapture" Width="100" Height="30" Canvas.Bottom="0" Canvas.Right="0" Command="{Binding saveCaptureOnClickCommnad}">保存</Button>
         </Canvas>
-        <Canvas Background="DeepSkyBlue" Width="505" Height="430" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,50,25,0">
+        <Canvas Width="505" Height="430" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,50,25,0">
             <TextBlock FontSize="14" Canvas.Top="3" Canvas.Left="2">撮影中</TextBlock>
             <Border Background="Gray" BorderBrush="DarkGray" BorderThickness="2" Canvas.Top="30">
                 <Image Source="{Binding PictureImage}" Name="pictureImage" Width="500" Height="350" />
             </Border>
             <Button x:Name="getCapture" Width="100" Height="30" Canvas.Bottom="0" Canvas.Right="0" Command="{Binding getCaptureOnClickCommand}">キャプチャ取得</Button>
+        </Canvas>
+        <Canvas Height="50" VerticalAlignment="Bottom">
+            <Button x:Name="close" Width="100" Height="30" Canvas.Right="0" Margin="0,0,25,0" Command="{Binding onClosedCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}">画面を閉じる</Button>
         </Canvas>
     </Grid>
 </Window>
