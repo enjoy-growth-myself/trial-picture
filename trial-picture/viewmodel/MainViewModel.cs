@@ -50,11 +50,11 @@ namespace trial_picture
                         {
                             if(i == 0)
                             {
-                                Cameras.Add($"PC内臓カメラ {0}");
+                                Cameras.Add($"カメラ {0}");
                             }
                             if(i == 1)
                             {
-                                Cameras.Add($"外部接続カメラ {1}");
+                                Cameras.Add($"カメラ {1}");
                             }
                         }
                     }

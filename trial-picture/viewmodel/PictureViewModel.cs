@@ -4,9 +4,9 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
-using trial_picture.models;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 
 namespace trial_picture
@@ -17,7 +17,7 @@ namespace trial_picture
         private VideoCapture _videoCapture;
         private Mat _mat;
         private bool _isRunning;
-        private List<Picture> _pictures;
+        //private List<Picture> _pictures;
         private int _cameraNo = 0;
         private BitmapSource _currentImage;
         private BitmapSource _selectedImage;
@@ -30,7 +30,7 @@ namespace trial_picture
         public PictureViewModel(int cameraNo)
         {
             _cameraNo = cameraNo;
-            _pictures = new List<Picture>();
+            //_pictures = new List<Picture>();
             CaptureImages = new ObservableCollection<BitmapSource>();
             getCaptureOnClickCommand = new RelayCommand(getCaptureOnClick);
             saveCaptureOnClickCommand = new RelayCommand(saveCaptureOnClick);
@@ -162,14 +162,31 @@ namespace trial_picture
             }
         }
 
-        private void OnClosed(System.Windows.Window window)
+        private async void OnClosed(System.Windows.Window window)
         {
             if(_isRunning && _videoCapture !=null && _videoCapture.IsOpened() && window != null)
             {
                 _isRunning = false;
-                _videoCapture.Release();
-                _videoCapture.Dispose();
+                await Task.Run(() =>
+                {
+                    _videoCapture.Release();
+                    _videoCapture.Dispose();
+                });
                 window.Close();
+            }
+        }
+
+        public async void OnWindowClosing(CancelEventArgs e)
+        {
+            // 閉じる前に必要な処理
+            if (_isRunning && _videoCapture != null && _videoCapture.IsOpened())
+            {
+                _isRunning = false;
+                await Task.Run(() =>
+                {
+                    _videoCapture.Release();
+                    _videoCapture.Dispose();
+                });
             }
         }
     }

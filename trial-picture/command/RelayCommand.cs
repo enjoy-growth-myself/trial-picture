@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace trial_picture
 {
@@ -37,10 +36,10 @@ namespace trial_picture
     {
         private Action<T> _onClosed;
 
-        public CloseCommand(Action<T> execute) { 
+        public CloseCommand(Action<T> execute)
+        {
             _onClosed = execute;
         }
-
 
         // CanExecuteChanged イベントの実装
         public event EventHandler CanExecuteChanged

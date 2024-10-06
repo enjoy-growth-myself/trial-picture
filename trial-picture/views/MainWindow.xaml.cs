@@ -1,10 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
-using System.Windows;
-using System.Windows.Media.Media3D;
-using OpenCvSharp;
-
-namespace trial_picture
+﻿namespace trial_picture
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

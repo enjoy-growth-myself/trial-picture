@@ -1,11 +1,4 @@
-﻿using System.IO;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using Microsoft.Win32;
-using OpenCvSharp;
-using OpenCvSharp.WpfExtensions;
-using trial_picture.models;
-
+﻿using OpenCvSharp;
 
 namespace trial_picture
 {
@@ -17,11 +10,21 @@ namespace trial_picture
         private VideoCapture _videoCapture;
         private Mat _mat;
         private bool _isRunning;
+        private PictureViewModel _pictureViewModel;
 
         public PictureWindow(int cameraNo)
         {
             InitializeComponent();
-            this.DataContext = new PictureViewModel(cameraNo);
+            _pictureViewModel = new PictureViewModel(cameraNo);
+            this.DataContext = _pictureViewModel;
+        }
+
+        // Windowの閉じるイベントをViewModelに委譲
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // ICommandのExecuteを呼び出し、処理を委譲
+            _pictureViewModel.OnWindowClosing(e);
+
         }
     }
 }
